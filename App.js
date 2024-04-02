@@ -13,7 +13,7 @@ import {
 } from "@expo-google-fonts/inter";
 import { useState } from "react";
 
-const RowView = ({ label, value }) => {
+const RowView = ({theme, label, value }) => {
   return (
     <View
       style={{
@@ -27,7 +27,7 @@ const RowView = ({ label, value }) => {
         <Text
           style={{
             fontFamily: "Inter-Regular",
-            color: "#303030",
+            color: theme ? "#9e9e9e" : "#303030",
             fontSize: 10,
             letterSpacing: 2,
             textTransform: "uppercase",
@@ -42,7 +42,7 @@ const RowView = ({ label, value }) => {
           style={{
             fontFamily: "Inter-Bold",
             fontSize: 20,
-            color: "#303030",
+            color: theme ? "#9e9e9e" : "#303030",
           }}
         >
           {value}
@@ -58,6 +58,7 @@ export default function App() {
     "Inter-Bold": Inter_700Bold,
   });
   const [showMore, setShowMore] = useState(false);
+  const [theme, setTheme] = useState(false);
 
   if (!fontsLoaded) {
     return <ActivityIndicator />;
@@ -65,7 +66,7 @@ export default function App() {
 
   return (
     <ImageBackground
-      source={require("./assets/light-bg.png")}
+      source={theme ? require("./assets/jeremy-bishop-dvACrXUExLs-unsplash (1).png") : require("./assets/light-bg.png")}
       style={{ flex: 1 }}
     >
       {/* PARENT VIEW */}
@@ -85,7 +86,7 @@ export default function App() {
                 style={{
                   fontFamily: "Inter-Regular",
                   fontSize: 12,
-                  color: "#fff",
+                  color: theme ? "#9e9e9e" : "#fff",
                 }}
               >
                 “The science of operations, as derived from mathematics more
@@ -95,7 +96,7 @@ export default function App() {
               <Text
                 style={{
                   fontFamily: "Inter-Bold",
-                  color: "#fff",
+                  color: theme ? "#9e9e9e" : "#fff",
                   fontSize: 12,
                   marginTop: 8,
                 }}
@@ -121,7 +122,7 @@ export default function App() {
               style={{
                 fontFamily: "Inter-Regular",
                 fontSize: 15,
-                color: "white",
+                color: theme ? "#9e9e9e" : "#fff",
                 marginLeft: 8,
                 letterSpacing: 3,
               }}
@@ -137,7 +138,7 @@ export default function App() {
                 style={{
                   fontFamily: "Inter-Bold",
                   fontSize: 100,
-                  color: "white",
+                  color: theme ? "#9e9e9e" : "#fff",
                 }}
               >
                 11:30
@@ -146,7 +147,7 @@ export default function App() {
                 style={{
                   fontFamily: "Inter-Regular",
                   fontSize: 15,
-                  color: "white",
+                  color: theme ? "#9e9e9e" : "#fff",
                 }}
               >
                 BST
@@ -160,15 +161,22 @@ export default function App() {
               style={{
                 fontFamily: "Inter-Bold",
                 fontSize: 15,
-                color: "white",
+                color: theme ? "#9e9e9e" : "#fff",
                 letterSpacing: 3,
               }}
             >
-              IN LONDON, UK
-            </Text>
-          </View>
+            IN LONDON, UK
+          </Text>
+        </View>
 
-          {/* BUTTON */}
+        {/* BUTTON */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: "space-between",
+
+          }}
+        >
           <TouchableOpacity
             onPress={() => {
               setShowMore(!showMore);
@@ -177,7 +185,7 @@ export default function App() {
               flexDirection: "row",
               height: 40,
               width: 115,
-              backgroundColor: "#fff",
+              backgroundColor: theme ? "#000" : "#fff",
               borderRadius: 30,
               marginTop: 50,
               justifyContent: "space-between",
@@ -190,7 +198,7 @@ export default function App() {
               style={{
                 fontFamily: "Inter-Bold",
                 fontSize: 12,
-                color: "#000",
+                color: theme ? '#fff' : "#000",
                 letterSpacing: 3,
               }}
             >
@@ -204,25 +212,64 @@ export default function App() {
               }
             />
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setTheme(!theme);
+            }}
+            style={{
+              flexDirection: "row",
+              height: 40,
+              width: 115,
+              backgroundColor: theme ? "#9e9e9e" : "#000",
+              borderRadius: 30,
+              marginTop: 50,
+              justifyContent: "space-between",
+              paddingLeft: 16,
+              paddingRight: 4,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Inter-Bold",
+                fontSize: 12,
+                color: theme ? "#000" : "#fff",
+                letterSpacing: 3,
+              }}
+            >
+              {theme ? "Light" : "Dark"}
+            </Text>
+            <Image
+                style={{ backgroundColor: theme ? "#9e9e9e" : '#000' }}
+              source={
+                theme
+                  ? require("./assets/sun.png")
+                  : require("./assets/moon.png")
+              }
+            />
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
 
-      {/* EXPANDED VIEW */}
-      {showMore && (
-        <View
-          style={{
-            backgroundColor: "#fff",
-            opacity: 0.8,
-            paddingVertical: 48,
-            paddingHorizontal: 26,
-          }}
-        >
-          <RowView label={"Current Timezone"} value="Europe/London" />
-          <RowView label={"Day of the year"} value="295" />
-          <RowView label={"Day of the week"} value="5" />
-          <RowView label={"Week number"} value="42" />
-        </View>
-      )}
-    </ImageBackground>
+      {/* EXPANDED VIEW */ }
+  {
+    showMore && (
+      <View
+        style={{
+          backgroundColor: theme ? "#000" : "#fff",
+          opacity: 0.8,
+          paddingVertical: 48,
+          paddingHorizontal: 26,
+        }}
+      >
+        <RowView theme={theme} label={"Current Timezone"} value="Europe/London" />
+        <RowView theme={theme} label={"Day of the year"} value="295" />
+        <RowView theme={theme} label={"Day of the week"} value="5" />
+        <RowView theme={theme} label={"Week number"} value="42" />
+      </View>
+    )
+  }
+    </ImageBackground >
   );
 }
